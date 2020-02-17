@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo "Creating document!"
+touch ext.txt
+echo "Created ext.txt"
+echo "Adding header info"
+
+echo -e '== Extensions ==\n{| border="1" cellspacing="0" cellpadding="2"' >> ext.txt
+echo -e '!Extension\n!First Name\n!Last Name\n!Polycom Model\n!Polycom MAC\n!DID\n!Email\n|----' >> ext.txt
+
+file=$1
+OLDIFS=$IFS
+IFS=' '
+while read -r f1 f2 f3 f4 f5 f6 f7;do  
+	echo -e "! $f1\n! $f2\n! $f3\n! $f4\n! $f5\n! $f6\n! $f7\n|----" >> ext.txt
+	echo User Added!
+done < "$file"
+IFS=$OLDIFS
