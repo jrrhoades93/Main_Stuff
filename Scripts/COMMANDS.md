@@ -26,4 +26,10 @@ This is my quick list of commands
 `split -b 9999k file.txt part.`
 
 * To recombine
-`cat part.?? > recombine.txt
+`cat part.?? > recombine.txt`
+
+* To check diskspace
+`df -h`
+
+* To check size of directory
+`du -sh <directory>`
