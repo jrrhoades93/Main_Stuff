@@ -1,23 +1,49 @@
 #!/bin/bash
+# Version 2.0
 
-echo "Creating document!"
-touch sidecar.txt
-echo "Created sidecar.txt"
-echo "Adding header info"
-echo -e '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' >> sidecar.txt
-echo -e "<directory>\n <item_list>" >> sidecar.txt
+#TODO: add flag functionality instead of words
 
+if [ $# -eq 0 ]
+    then
+        echo "Usage: ./sidecar_v2.sh <file> <sort>"
+        echo "    sort methods:"
+        echo "        first  First Name"
+        echo "        last  Last Name"
+        exit 1
+fi
 file=$1
+s_meth=$2
+echo "Creating document!"
+touch directory.xml
+echo "Created directory.xml"
+echo "Executing sort if applicable"
+# Enter Sort Stuff Here
+if [ $s_meth = "first" ]
+    then
+    sort $file > temp.txt
+    cp temp.txt $file
+    rm temp.txt    
+elif [ $s_meth = "last" ]
+    then
+    sort -k2 $file > temp.txt
+    cp temp.txt $file
+    rm temp.txt
+else
+    echo "No Sorting Applied"
+fi        
+echo "Adding header info"
+echo -e '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' >> directory.xml
+echo -e "<directory>\n <item_list>" >> directory.xml
 OLDIFS=$IFS
 IFS=' '
 counter=1
 while read f1 f2 f3;do  
-	echo -e "  <item>\n   <fn>$f1</fn>\n   <ln>$f2</ln>\n   <ct>$f3</ct>" >> sidecar.txt
-	echo -e "   <sd>$counter</sd>\n   <bw>1</bw>" >> sidecar.txt
-	echo -e "  </item>" >> sidecar.txt
-	echo User Added!
-	counter=$((counter+1))
+    echo -e "  <item>\n   <fn>$f1</fn>\n   <ln>$f2</ln>\n   <ct>$f3</ct>" >> directory.xml
+    echo -e "   <sd>$counter</sd>\n   <bw>1</bw>" >> directory.xml
+    echo -e "  </item>" >> directory.xml
+    echo User Added!
+    counter=$((counter+1))
 done < "$file"
 IFS=$OLDIFS
 
-echo -e " </item_list>\n</directory>" >> sidecar.txt
+echo -e " </item_list>\n</directory>" >> directory.xml
